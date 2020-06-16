@@ -3,7 +3,7 @@ node
 	  def mvnHome = tool 'mvn'
 	  
           
-	  stage ('workspace clean') {
+	  stage ('workspace cleanup') {
 	  cleanWs()	         
                  
 	  }
