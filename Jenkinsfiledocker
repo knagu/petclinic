@@ -21,11 +21,10 @@ node
 	  //echo "Tests successful"
 	  //}
           stage('Sonar Analysis')
-	  {            
-             sh label: '', script: ''' IP=`curl -s http://169.254.169.254/latest/meta-data/local-ipv4` 
-              sed -i \'s/10.0.1.163/\'${IP}\'/g\' /usr/share/maven/conf/settings.xml
-             ${mvnHome}/bin/mvn sonar:sonar'''   
-            //sh "${mvnHome}/bin/mvn sonar:sonar"	
+	  { 
+                //sh label: '', script: '''IP=`curl -s http://169.254.169.254/latest/meta-data/local-ipv4` 
+                //sed -i \'s/xip/\'${IP}\'/g\' /usr/share/maven/conf/settings.xml'''
+            sh "${mvnHome}/bin/mvn sonar:sonar"	
 	  }
          stage('Deploy docker image to Nexus'){
           withCredentials( [usernamePassword( credentialsId: 'nexus', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
