@@ -26,6 +26,13 @@ node
               //  sed -i \'s/10.0.1.163/\'${IP}\'/g\' /usr/share/maven/conf/settings.xml'''
             //sh "${mvnHome}/bin/mvn sonar:sonar"	
 	  //}
+          stage('Upload helm chart to Nexus'){
+          withCredentials( [usernamePassword( credentialsId: 'nexus', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+               sh label: '', script: '''sed \'s/xtag/$BUILD_NUMBER/g\' /home/values-template.yaml > /home/petclinic/values.yaml
+               helm package petclinic --version=0.$BUILD_NUMBER.0               
+               curl -u $USERNAME:$PASSWORD http://10.0.1.163:8081/repository/petclinic-chart/ --upload-file petclinic-0.$BUILD_NUMBER.0.tgz -v'''
+         }
+      }
          stage('Deploy docker image to Nexus'){
           withCredentials( [usernamePassword( credentialsId: 'nexus', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
                                               
@@ -39,12 +46,6 @@ node
                 docker push 10.0.1.163:8082/petclinic:latest'''
           }
      }
-     stage('Upload helm chart to Nexus'){
-          withCredentials( [usernamePassword( credentialsId: 'nexus', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
-               sh label: '', script: '''sed \'s/xtag/$BUILD_NUMBER/g\' /home/values-template.yaml > /home/petclinic/values.yaml
-               helm package petclinic --version=0.$BUILD_NUMBER.0               
-               curl -u $USERNAME:$PASSWORD http://10.0.1.163:8081/repository/petclinic-chart/ --upload-file petclinic-0.$BUILD_NUMBER.0.tgz -v'''
-         }
-      }
+     
           
   }
