@@ -31,7 +31,7 @@ node
                sh label: '', script: '''sed \'s/xtag/$BUILD_NUMBER/g\' /home/values-template.yaml > /home/petclinic/values.yaml
                cd /home
                helm package petclinic --version=0.$BUILD_NUMBER.0               
-               curl -u $USERNAME:$PASSWORD http://10.0.1.163:8081/repository/petclinic-chart/ --upload-file petclinic-0.$BUILD_NUMBER.0.tgz -v'''
+               curl -u $USERNAME:$PASSWORD http://10.0.1.163:8081/repository/myhelm/ --upload-file petclinic-0.$BUILD_NUMBER.0.tgz -v'''
          }
       }
          stage('Deploy docker image to Nexus'){
